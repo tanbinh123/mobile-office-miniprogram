@@ -72,8 +72,8 @@
 					<view class="tui-right">提交Bug</view>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell @click="detail" :arrow="true" last="true">
-				<view class="tui-item-box">
+			<tui-list-cell  :arrow="true" last="true">
+				<view class="tui-item-box" @tap="tapEvent" data-index="3">
 					<image src="/static/images/my/thorui.png" class="tui-logo" mode="widthFix"></image>
 					<text class="tui-list-cell_name">关于</text>
 					<view class="tui-right">暂无新版本</view>

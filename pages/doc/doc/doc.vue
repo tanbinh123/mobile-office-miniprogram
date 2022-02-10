@@ -1,33 +1,34 @@
 <template>
 	<view class="container">
 		<image src="https://www.thorui.cn/img/wait.gif" mode="widthFix" class="tui-banner"></image>
-		<view class="tui-text">---我知道你会来，所以我会等。</view>
+		<view class="tui-text">---本项目基于以下框架开发</view>
 
 		<view class="tui-view">
 			<view class="tui-cell">
-				<view class="tui-title">组件文档地址：</view>
+				<view class="tui-title">ThorUI组件文档地址：</view>
 				<view class="tui-link" @tap="getLink('https://thorui.cn/doc/')">https://thorui.cn/doc/</view>
 			</view>
+			
 			<view class="tui-cell">
-				<view class="tui-title">uni-app版本GitHub地址：</view>
-				<view class="tui-link" @tap="getLink('https://github.com/dingyong0214/ThorUI-uniapp')">
-					https://github.com/dingyong0214/ThorUI-uniapp</view>
+				<view class="tui-title">erupt通用数据管理框架：</view>
+				<view class="tui-link" @tap="getLink('https://www.erupt.xyz/')">
+					https://www.erupt.xyz/</view>
+			</view>
+			<view class="tui-cell">
+				<view class="tui-title">微信云托管：</view>
+				<view class="tui-link" @tap="getLink('https://cloud.weixin.qq.com/cloudrun/service')">
+					https://cloud.weixin.qq.com/cloudrun/service</view>
 			</view>
 			<view class="tui-cell">
 				<view class="tui-title">uni-app版本插件市场地址：</view>
 				<view class="tui-link" @tap="getLink('https://ext.dcloud.net.cn/plugin?id=556')">
 					https://ext.dcloud.net.cn/plugin?id=556</view>
+			</view><view class="tui-cell">
+				<view class="tui-title">本项目GitHub地址：</view>
+				<view class="tui-link" @tap="getLink('https://github.com/404name/mobile-office-miniprogram')">
+					https://github.com/404name/mobile-office-miniprogram</view>
 			</view>
-			<view class="tui-cell">
-				<view class="tui-title">小程序版本GitHub地址：</view>
-				<view class="tui-link" @tap="getLink('https://github.com/dingyong0214/ThorUI')">
-					https://github.com/dingyong0214/ThorUI</view>
-			</view>
-			<view class="tui-cell">
-				<view class="tui-title">小程序版本插件市场地址：</view>
-				<view class="tui-link" @tap="getLink('https://ext.dcloud.net.cn/plugin?id=569')">
-					https://ext.dcloud.net.cn/plugin?id=569</view>
-			</view>
+			
 		</view>
 
 	</view>
