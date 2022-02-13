@@ -6,8 +6,8 @@
 const tui = {
 	//接口地址
 	interfaceUrl: function() {
-		return 'http://localhost:8080/erupt-api/office'
-		//return 'https://office-system-1592862-1309456602.ap-shanghai.run.tcloudbase.com/erupt-api/office'
+		// return 'http://localhost:8080/erupt-api/office'
+		 return 'https://office-system-1592862-1309456602.ap-shanghai.run.tcloudbase.com/erupt-api/office'
 		//return 'https://www.thorui.cn'
 	},
 	toast: function(text, duration, success) {
@@ -114,8 +114,9 @@ const tui = {
 					}
 					// 添加跳转
 					if(res.data.status == 401){
-						uni.removeStorageSync('office_token');
+						uni.removeStorageSync('office_user');
 						uni.removeStorageSync('office_user_name');
+						uni.removeStorageSync('office_user_img');
 						uni.navigateTo({
 							url: '/pages/common/login/login'
 						})

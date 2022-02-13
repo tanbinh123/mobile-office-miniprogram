@@ -1,10 +1,49 @@
 <template>
+	
 	<view class="tui-container">
+
+<!-- 			<tui-navigation-bar backgroundColor="#fff" :isFixed="true" :isOpacity="false">
+				<view class="tui-content-box">
+					<view class="tui-avatar-box"><image src="/static/images/index/logo.png" class="tui-avatar"></image></view>
+					<view class="tui-search-box">
+						<tui-icon name="search-2" :size="18" color="#bfbfbf"></tui-icon>
+						<view class="tui-search-text">请输入搜索关键字</view>
+					</view>
+					<view class="tui-notice-box">
+						<tui-icon name="square-fill" color="#333" :size="30"></tui-icon>
+						<tui-badge type="danger" absolute :scaleRatio="0.8" top="-4rpx">9</tui-badge>
+					</view>
+				</view>
+			</tui-navigation-bar> -->
+
+		
 		<view class="tui-extend-box">
-			<block v-for="(item, index) in list" :key="index" v-if="(index + 1) % 2 != 0">
-				<view class="tui-extend-item" :class="['tui-bg-' + item.bg]" @tap.stop="detail(item.page)">
-					<view class="tui-title tui-light">{{ item.name }}</view>
-					<view class="tui-sub-title">{{ item.desc }}</view>
+			<block v-for="(item, index) in publishDocument" :key="index" v-if="(index + 1) % 2 != 0">
+				<view class="tui-extend-item" :class="['tui-bg-' + item.bg]" @tap.stop="detail(item)">
+					<view class="tui-title tui-light">{{ item.title }}</view>
+					<view class="tui-sub-title">{{item.date.substr(0,10)}}-{{item.publisherName}}</view>
+					<tui-badge type="danger" absolute :scaleRatio="0.8" top="-4rpx">{{item.stateName}}</tui-badge>
+					<view class="tui-footer">
+						<tui-tag padding="12rpx 24rpx" size="24rpx" type="white" shape="circle" :plain="true">查看详情</tui-tag>
+						<view>
+							<button @tap.stop="like(index)" class="tui-btn">
+								<tui-icon :name="item.like ? 'like-fill' : 'like'" :color="item.like ? '#f54f46' : '#fff'" :size="20" class="tui-l-icon"></tui-icon>
+							</button>
+							<button open-type="share" @tap.stop="onshare" class="tui-btn" :data-id="index">
+								<tui-icon name="partake" color="#fff" :size="20" class="tui-r-icon"></tui-icon>
+							</button>
+							
+						</view>
+					</view>
+				</view>
+			</block>
+		</view>
+		<view class="tui-extend-box">
+			<block v-for="(item, index) in publishDocument" :key="index" v-if="(index + 1) % 2 == 0">
+				<view class="tui-extend-item" :class="['tui-bg-' + item.bg]" @tap.stop="detail(item)">
+					<view class="tui-title tui-light">{{ item.title }}</view>
+					<view class="tui-sub-title">{{item.date.substr(0,10)}}-{{item.publisherName}}</view>
+					<tui-badge type="danger" absolute :scaleRatio="0.8" top="-4rpx">{{item.stateName}}</tui-badge>
 					<view class="tui-footer">
 						<tui-tag padding="12rpx 24rpx" size="24rpx" type="white" shape="circle" :plain="true">查看详情</tui-tag>
 						<view>
@@ -19,446 +58,149 @@
 				</view>
 			</block>
 		</view>
-		<view class="tui-extend-box">
-			<block v-for="(item, index) in list" :key="index" v-if="(index + 1) % 2 == 0">
-				<view class="tui-extend-item" :class="'tui-bg-' + item.bg" :id="item.page" @tap.stop="detail(item.page)">
-					<view class="tui-title tui-light">{{ item.name }}</view>
-					<view class="tui-sub-title">{{ item.desc }}</view>
-					<view class="tui-footer">
-						<tui-tag padding="12rpx 24rpx" size="24rpx" type="white" shape="circle" :plain="true">查看详情</tui-tag>
-						<view>
-							<view @tap.stop="like(index)" class="tui-btn">
-								<tui-icon :name="item.like ? 'like-fill' : 'like'" :color="item.like ? '#f54f46' : '#fff'" :size="20" class="tui-l-icon"></tui-icon>
-							</view>
-							<button open-type="share" @tap.stop="onshare" class="tui-btn" :data-id="index">
-								<tui-icon name="partake" color="#fff" :size="20" class="tui-r-icon"></tui-icon>
-							</button>
-						</view>
-					</view>
-				</view>
-			</block>
-		</view>
 	</view>
 </template>
 
 <script>
+	import marked from '@/components/uni/marked'
+	import uParse from '@/components/uni/uParse/src/wxParse'
 	import {
 		mapActions,
 		mapState
 	} from 'vuex';
 	export default {
+		components:{
+			uParse
+		},
 		data() {
 			return {
 				list: [],
-				listOnline: [{
-						name: '字体图标',
-						desc: 'icon：常用字体图标，支持基本样式设置，支持nvue。',
-						page: '/pages/extend/icon/icon',
-						like: false,
-						bg: this.getRandom()
-					},
+				publishDocument: [
 					{
-						name: 'Button按钮',
-						desc: 'Button按钮:可自定义宽高，设置字体大小，阴影，圆角，镂空等。',
-						page: '/pages/extend/button/button',
+						id: 1434,
+						content: "<p style=\"text-align: center;\">  da&#39;w&#39;da&#39;wdawdawda&#39;wdawda&#39;w&#39;da&#39;w&#39;dadawdawdaw&nbsp;</p><p style=\"text-align: center;\">我是公文</p><p style=\"text-align: center;\">dawdawdawword</p><p style=\"text-align: center;\"></p><p style=\"text-align: center;\"></p><p style=\"text-align: center;\"><audio controls=\"controls\" style=\"display: none;\"></audio></p>",
+						publisher: 2,
+						publisherName: "李四",
+						state: "6",
 						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Tag标签',
-						desc: 'Tag标签：可自定义大小，设置字体大小，圆角，镂空等。',
-						page: '/pages/extend/tag/tag',
+						title: "测试公文",
+						bg: this.getRandom(),
+						date: "2022-02-08T16:12:49.000+00:0"
+					},{
+						id: 1453,
+						content: "<p style=\"text-alig style=\"display: none;\"></audio></p>",
+						publisher: 2,
+						publisherName: "李四",
+						state: "6",
 						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Badge 徽章',
-						desc: 'Badge：可设置成圆点或数字角标，支持缩放以及定位设置。',
-						page: '/pages/extend/badge/badge',
+						title: "测试公文",
+						bg: this.getRandom(),
+						date: "2022-02-08T16:12:49.000+00:0"
+					},{
+						id: 166,
+						content: "<p style=\"text-align: s=\"controls\" style=\"display: none;\"></audio></p>",
+						publisher: 2,
+						publisherName: "李四",
+						state: "6",
 						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'List 列表',
-						desc: 'List：可设置点击效果，可设置是否显示箭头。',
-						page: '/pages/extend/list/list',
+						title: "测试公文",
+						bg: this.getRandom(),
+						date: "2022-02-08T16:12:49.000+00:0"
+					},{
+						id: 155,
+						content: "<p style=\"text-align: center;\">da&#39;w&#39;da&#39;wdawdawda&#39;wdawda&#39;w&#39;da&#39;w&#39;dadawdawdaw&nbsp;</p><p styrols=\"controls\" style=\"display: none;\"></audio></p>",
+						publisher: 2,
 						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Card 卡片',
-						desc: 'Card 卡片：根据需要设置内容，可设置是否通栏。',
-						page: '/pages/extend/card/card',
+						publisherName: "李四",
+						state: "6",
+						title: "测试公文",
+						bg: this.getRandom(),
+						date: "2022-02-08T16:12:49.000+00:0"
+					},{
+						id: 144,
+						content: "<p style=\"text-align: center;\">da&#39;w&#39;da&#39;wdawdawda&#39;wdawda&#39;w&#39;da&#39;w&#39;dadawdawdaw&nbsp;</p><p style=\"text-align: center;\">我是公文</p><p style=\"text-align: center;\">dawdawdawword</p><p style=\"text-align: center;\">我是内容</p><p style=\"text-align: center;\">  </p><p style=\"text-align: center;\"><audio controls=\"controls\" style=\"display: none;\"></audio></p>",
+						publisher: 2,
+						publisherName: "李四",
 						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Grid 宫格',
-						desc: 'Grid 宫格：可设置2~5列，以及基本样式设置。',
-						page: '/pages/extend/grid/grid',
+						state: "6",
+						title: "测试公文",
+						bg: this.getRandom(),
+						date: "2022-02-08T16:12:49.000+00:0"
+					},{
+						id: 123,
+						content: "<p style=\"text-align: center;\">da&#39;w&#39;da&#39;wdawdawda&#39;wdawda&#39;w&#39;da&#39;w&#39;dadawdawdaw&nbsp;</p><p style=\"text-align: center;\">我是公文</p><p style=\"text-align: center;\">dawdawdawword</p><p style=\"text-align: center;\">我是内容</p><p style=\"text-align: center;\">  </p><p style=\"text-align: center;\"><audio controls=\"controls\" style=\"display: none;\"></audio></p>",
+						publisher: 2,
+						publisherName: "李四",
+						state: "6",
 						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Loading 加载',
-						desc: '加载效果以及加载完成或无数据时的效果。',
-						page: '/pages/extend/loading/loading',
+						title: "测试公文",
+						bg: this.getRandom(),
+						date: "2022-02-08T16:12:49.000+00:0"
+					},{
+						id: 421,
+						content: "<p style=\"text-align: center;\">da&#39;w&#39;da&#39;wdawdawda&#39;wdawda&#39;w&#39;da&#39;w&#39;dadawdawdaw&nbsp;</p><p style=\"text-align: center;\">我是公文</p><p style=\"text-align: center;\">dawdawdawword</p><p style=\"text-align: center;\">我是内容</p><p style=\"text-align: center;\">  </p><p style=\"text-align: center;\"><audio controls=\"controls\" style=\"display: none;\"></audio></p>",
+						publisher: 2,
+						publisherName: "李四",
 						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Footer 页脚',
-						desc: 'Footer 页脚：支持基本样式设置，可设置是否固定在底部。',
-						page: '/pages/extend/footer/footer',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '消息提示',
-						desc: '包括顶部提示，居中提示，底部提示。可切换提示框背景颜色。',
-						page: '/pages/extend/msgTips/msgTips',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '吸顶容器',
-						desc: 'sticky吸顶容器，支持设置吸顶容器距离顶部距离，支持异步加载。',
-						page: '/pages/extend/sticky/sticky',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '数字键盘',
-						desc: '例子包括6位数和4位数输入，长度动态传入，根据实际情况使用。',
-						page: '/pages/extend/keyboard/keyboard',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '时间轴',
-						desc: 'time-axis时间轴，样式可自定义，例子实现了物流时间轴，在【thor=>日志】中也有使用。',
-						page: '/pages/extend/timeaxis/timeaxis',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '滚动消息',
-						desc: '滚动消息：包括顶部通告栏，滚动新闻，以及搜索框中出现的热搜产品。',
-						page: '/pages/extend/rollingNews/rollingNews',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '弹层下拉选择',
-						desc: '包含顶部下拉选择列表、输入框下拉选择以及底部分享弹层。',
-						page: '/pages/extend/popup/popup',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'ActionSheet',
-						desc: '操作菜单:可加入提示信息，可单独设置字体样式。',
-						page: '/pages/extend/actionsheet/actionsheet',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'NumberBox',
-						desc: '数字框:可设置步长，支持浮点数，支持调整样式(可单独设置)。',
-						page: '/pages/extend/numberbox/numberbox',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Rate评分',
-						desc: 'Rate评分:可设置大小颜色，支持半星，支持手势touch选择。',
-						page: '/pages/extend/rate/rate',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Modal弹框',
-						desc: 'Modal弹框:可设置按钮数，按钮样式，提示文字样式等，还可自定义弹框内容。',
-						page: '/pages/extend/modal/modal',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '倒计时',
-						desc: '倒计时:时分秒倒计时，支持设置大小，颜色等。',
-						page: '/pages/extend/countdown/countdown',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '分隔符',
-						desc: 'Divider分隔符：可设置占据高度，线条宽度，颜色等。',
-						page: '/pages/extend/divider/divider',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '卡片轮播',
-						desc: '卡片轮播：包含顶部轮播，秒杀商品轮播等。',
-						page: '/pages/extend/carousel/carousel',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '回到顶部',
-						desc: '回到顶部：可设置bottom，right值，可设置距离顶部多少距离显示。',
-						page: '/pages/extend/goTop/goTop',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'alert弹框',
-						desc: 'alert弹框：可设置提示文本，按钮文本及样式。',
-						page: '/pages/extend/alert/alert',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'No Data',
-						desc: '无数据提示：默认居中显示，可设置。带操作按钮，可隐藏。',
-						page: '/pages/extend/nodata/nodata',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'toast提示',
-						desc: 'toast提示：带icon提示，可隐藏，居中显示。',
-						page: '/pages/extend/toast/toast',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '表单验证',
-						desc: 'Form Validation：常用的表单验证,只需配置验证项以及相关提示。',
-						page: '/pages/extend/formValidation/formValidation',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '日期时间选择',
-						desc: 'picker-view扩展，日期时间选择器，可设置默认显示，可根据需要调整选择的类型。',
-						page: '/pages/extend/picker-dateTime/picker-dateTime',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '复制文本',
-						desc: 'clipboard，复制到剪贴板，兼容H5，APP和小程序依然使用平台自带api。',
-						page: '/pages/extend/clipboard/clipboard',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '悬浮按钮',
-						desc: 'fab，拓展出来的按钮不应多于6个，否则违反了作为悬浮按钮的快速、高效的原则。',
-						page: '/pages/extend/fab/fab',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'Tabbar',
-						desc: 'Tabbar，类似uni-app原生tabbar组件，可用于自定义tabbar。',
-						page: '/pages/extend/tabbar/tabbar',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'tabs标签页',
-						desc: 'tabs标签页，支持设置字体颜色、字体大小、背景色、高度等。',
-						page: '/pages/extend/tabs/tabs',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '折叠面板',
-						desc: 'collapse折叠面板，用来折叠/显示过长的内容或者是列表。内容及样式自定义。',
-						page: '/pages/extend/collapse/collapse',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '图片上传',
-						desc: 'upload，图片上传，需要根据上传接口实际返回数据进行适当调整 。',
-						page: '/pages/extend/upload/upload',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '骨架屏',
-						desc: '数据请求时常见到锁屏的loading动画，而现在越来越多的产品倾向于使用Skeleton Screen替代 。',
-						page: '/pages/extend/skeleton/skeleton',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '日历',
-						desc: 'calendar日历： 可选择单个日期，可选择日期区间(可跨年跨月)，支持设置日期可选范围，支持设置状态。',
-						page: '/pages/extend/calendar/calendar',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '步骤条',
-						desc: 'Steps步骤条： 支持横向与纵向以及基本样式设置。',
-						page: '/pages/extend/steps/steps',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'drawer 抽屉',
-						desc: 'drawer： 左右抽屉，内容超过一屏时建议使用scroll-view。',
-						page: '/pages/extend/drawer/drawer',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '滑动菜单',
-						desc: 'swipeAction滑动菜单：actions长度为0时，插槽可直接自定义操作菜单按钮。',
-						page: '/pages/extend/swipeAction/swipeAction',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '底部导航菜单',
-						desc: 'Bottom Navigation：支持二级菜单，支持暗黑模式，具体使用参考文档。',
-						page: '/pages/extend/bottom-navigation/bottom-navigation',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '级联选择',
-						desc: 'Cascade Selection：支持一次性传入所有数据，支持分级请求返回数据，支持N级，直至没有下一级数据。',
-						page: '/pages/extend/selection/selection',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '圆形进度条',
-						desc: 'Circular Progress：圆形进度条，可设置大小颜色等基本样式，可显示进度或自定义显示内容。',
-						page: '/pages/extend/circular-progress/circular-progress',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '图片裁剪',
-						desc: 'Image Cropper：图片裁剪，组件提供了默认裁剪，可自定义操作栏。',
-						page: '/pages/extend/cropper/cropper',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'NavBar',
-						desc: 'NavBar自定义导航栏，支持自定义NavBar内容，支持渐变，支持沉浸式。',
-						page: '/pages/extend/navigation-bar/navigation-bar',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '气泡弹框',
-						desc: 'Bubble Popup：最常见的右上角弹出菜单，可以做聊天对话框使用。可设置不同方向。',
-						page: '/pages/extend/bubble/bubble',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '图片组合',
-						desc: 'Image Group图片组合，可设置图片宽高，圆角，偏移距离等，可设置排列方向。',
-						page: '/pages/extend/image/image',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '颜色分析器',
-						desc: 'color analysis，图片颜色分析，传入图片获取图片主颜色。',
-						page: '/pages/extend/color-analysis/color-analysis',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '中文转拼音',
-						desc: 'chinese to pinyin，获取拼音首字母等，使用场景：如获取通讯录按A-Z排序。',
-						page: '/pages/extend/zhToPinYin/zhToPinYin',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '富文本解析',
-						desc: 'uParse，uni-app框架下富文本解析，支持markdown和html解析。',
-						page: '/pages/extend/richText/richText',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '网络请求',
-						desc: 'Network request，发起网络请求，简单的封装与使用 。',
-						page: '/pages/extend/request/request',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: '抽奖转盘',
-						desc: '抽奖转盘，例子使用随机值进行抽奖，可以指定中奖奖项。',
-						page: '/pages/extend/luckdraw/luckdraw',
-						like: false,
-						bg: this.getRandom()
-					},
-					{
-						name: 'ThorUI示例',
-						desc: 'ThorUI示例项目中组件内容只对会员开放，ThorUI示例是该组件库的扩展项目。',
-						page: 'thorui',
-						like: false,
-						bg: this.getRandom()
+						state: "6",
+						title: "测试公文",
+						bg: this.getRandom(),
+						date: "2022-02-08T16:12:49.000+00:0"
 					}
-				]
+				],
+				top: 0, //标题图标距离顶部距离
+				opacity: 0,
+				scrollTop: 0.5
 			};
 		},
 		computed: {
 			...mapState(['networkConnected', 'isOnline'])
 		},
 		watch: {
-			networkConnected(isConnected) {
-				if (isConnected) {
-					this.statusChange();
-				}
-			},
-			isOnline(val) {
-				if (val) {
-					this.statusChange();
-				}
-			}
+		
 		},
 		onLoad() {
-			this.statusChange();
+			this.tui.request('/document/getPublish', "GET", {}, false,true, false ).then((res) => {
+				this.publishDocument = res.data;
+				for(var i = 0; i < this.publishDocument.length; i++){
+					this.publishDocument[i].bg = this.getRandom();
+					this.publishDocument[i].like = false;
+					this.publishDocument[i].stateName = uni.getStorageSync("office_state")[parseInt(this.publishDocument[i].state)].name;
+				}
+				console.log(res.data)
+			}).catch((res) => {
+				this.tui.toast(res.message, 2000, false);
+			})
 		},
+		
 		methods: {
-			...mapActions(['getOnlineStatus']),
-			async statusChange() {
-				this.list = this.listOnline;
+			initNavigation(e) {
+				this.opacity = e.opacity;
+				this.top = e.top;
+			},
+			opacityChange(e) {
+				this.opacity = e.opacity;
+			},
+			back() {
+				uni.navigateBack();
 			},
 			getRandom: function(index) {
 				var rnd = Math.floor(Math.random() * 6 + 1);
 				return rnd;
 			},
-			detail: function(pageUrl) {
-				if(pageUrl=='thorui'){
-					this.openThorUI()
-				}else{
-					this.tui.href(pageUrl);
-				}
-				
+			detail: function(document) {
+				uni.setStorageSync("office_detail_document",document)
+				uni.navigateTo({
+					url: '/pages/extend/detail/detail?edit=false'
+				});
 			},
 			like: function(index) {
-				this.$set(this.list[index], 'like', !this.list[index].like);
+				this.$set(this.publishDocument[index], 'like', !this.publishDocument[index].like);
 			},
 			onshare: function(e) {
 				//#ifdef APP-PLUS
 				let index = e.target.dataset.id;
-				let title = this.list[index].name;
+				let title = this.publishDocument[index].title;
 				plus.share.sendWithSystem({
 						content: 'ThorUI：' + title,
 						href: 'https://thorui.cn/'
@@ -495,7 +237,7 @@
 		},
 		onShareAppMessage: function(e) {
 			let index = e.target.dataset.id;
-			let title = this.list[index].name;
+			let title = this.publishDocument[index].title;
 			return {
 				title: title
 			};
@@ -555,7 +297,7 @@
 
 	.tui-title {
 		font-size: 40rpx;
-		line-height: 40rpx;
+		line-height: 45rpx;
 		font-weight: bold;
 		position: relative;
 	}
@@ -641,5 +383,57 @@
 	.tui-light {
 		color: #fff;
 		text-shadow: 0 0 0.1em rgba(0, 0, 0, 0.3), 0 0 0.2em rgba(0, 0, 0, 0.3);
+	}
+	
+.tui-content-box {
+	width: 100%;
+	height: 100rpx;
+	padding: 0 30rpx;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+}
+	.tui-avatar-box {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #eaeef1;
+		flex-shrink: 0;
+	}
+	.tui-avatar {
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+	}
+	
+	.tui-search-box {
+		width: 100%;
+		height: 32px;
+		margin: 0 28rpx;
+		border-radius: 18px;
+		font-size: 14px;
+		background-color: #f1f1f1;
+		padding: 0 12px;
+		box-sizing: border-box;
+		color: #bfbfbf;
+		display: flex;
+		align-items: center;
+	}
+	
+	.tui-bg-white {
+		background-color: #ffffff !important;
+	}
+	.tui-search-text {
+		padding-left: 10rpx;
+	}
+	
+	.tui-notice-box {
+		position: relative;
+		flex-shrink: 0;
+		font-size: 44rpx;
+		color: #fff;
 	}
 </style>

@@ -16,36 +16,44 @@ const store = createStore({
 // #endif
 	state: {
 		//用户名
-		userName: uni.getStorageSync("office_user_name") || "echo.",
+		myTask: uni.getStorageSync("office_task") || "...",
+		userName: uni.getStorageSync("office_user").name || "echo.",
 		userImg: uni.getStorageSync("office_user_img") || "/static/images/my/mine_def_touxiang_3x.png",
+		appName: "移动审批小程序",
 		//是否登录 项目中改为真实登录信息判断，如token
 		isLogin: uni.getStorageSync("office_token") ? true : false,
 		//登录后跳转的页面路径 + 页面参数
 		returnUrl: "",
 		//app版本
-		version: "1.0.1",
+		version: "1.0.2",
 		//当前是否有网络连接
 		networkConnected: true,
 		isOnline: true,
 		eruptUser: [],
 	},
 	mutations: {
+		updateUser(state, payload) {
+			if (payload) {
+				uni.setStorageSync('office_user', payload.eruptUser);
+				state.eruptUser = payload.eruptUser
+			}
+			state.isLogin = true
+		},
 		login(state, payload) {
 			if (payload) {
 				uni.setStorageSync('office_token', payload.token);
 				uni.setStorageSync('office_user', payload.eruptUser);
-				uni.setStorageSync('office_user_name', payload.userName);
-				uni.removeStorageSync('office_user_img',payload.eruptUser.passwordB);
-				uni.removeStorageSync('office_user_header',"");
+				uni.setStorageSync('office_user_header',"");
 				state.eruptUser = payload.eruptUser
 			}
 			state.isLogin = true
 			
 		},
-		logout(state) {
+		logoutState(state) {
 			uni.removeStorageSync('office_token');
 			uni.removeStorageSync('office_user');
 			uni.removeStorageSync('office_user_name');
+			uni.removeStorageSync('office_user_img');
 			state.eruptUser = ""
 			state.isLogin = false
 			state.returnUrl = ""

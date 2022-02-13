@@ -163,7 +163,6 @@ export default {
 					uni.reLaunch({
 						url: '/pages/tabbar/my/my'
 					});
-					
 				}, 200);
 			}).catch((res) => {
 				this.tui.toast(res, 2000, true);

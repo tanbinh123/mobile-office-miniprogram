@@ -51,7 +51,7 @@
 				this.tui.request(urls[type], "GET", postData, false,true, false ).then((res) => {
 					this.result = `${JSON.stringify(res)}`
 				}).catch((res) => {
-					this.result = ` ${JSON.stringify(res)}`
+					this.tui.toast(res.message, 2000, false);
 				})
 			}
 		}

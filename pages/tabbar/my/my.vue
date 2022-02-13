@@ -82,8 +82,9 @@
 		</tui-list-view>
 		<view class="tui-applets__vip" @tap="openThorUI">
 			<tui-icon name="applets" color="#07c160" :size="44" unit="rpx"></tui-icon>
-			<text>版本{{version}}</text>
+			<text>{{appName}}{{version}}</text>
 		</view>
+		
 	</view>
 </template>
 
@@ -91,21 +92,26 @@
 	import {
 		mapState
 	} from 'vuex';
+	import { mapMutations } from 'vuex';
 	export default {
-		computed: mapState(['isLogin', 'userName','version','userImg']),
+		computed: mapState(['isLogin', 'userName','version','userImg','appName']),
 		data() {
 			return {};
 		},
 		onShow: function() {},
 		methods: {
+			...mapMutations(['logoutState']),
 			logout: function() {
 				this.tui.modal("提示", "确定退出登录？", true, (res) => {
 					if (res) {
-						uni.removeStorageSync('office_token');
-						uni.removeStorageSync('office_user_name');
-						uni.reLaunch({
-							url: '/pages/common/login/login'
-						});
+						this.logoutState({});
+						this.tui.toast('退出成功', 2000, true);
+						setTimeout(() => {
+							uni.reLaunch({
+								url: '/'
+							});
+						}, 200);
+						
 					}
 				})
 			},
@@ -456,5 +462,11 @@
 	}
 	.list-menu{
 		margin: 0 20rpx;
+	}
+	.tui-banner {
+		position: absolute;
+		bottom: 0rpx;
+		width: 100%;
+		height: 375rpx
 	}
 </style>
