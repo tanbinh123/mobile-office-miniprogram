@@ -51,9 +51,15 @@ export default {
 			code: '',
 		};
 	},
+	onLoad(option){
+		if(option.clean == "true"){
+			this.logoutState({});
+			this.tui.toast('身份过期', 2000, true);
+		}
+	},
 	methods: {
 		...mapMutations(['login']),
-		
+		...mapMutations(['logoutState']),
 		getRandom: function(u) {
 			let rnd = '';
 			u = u || 4;

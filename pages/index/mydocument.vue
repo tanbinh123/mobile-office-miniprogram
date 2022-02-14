@@ -122,6 +122,11 @@
 			this.stateName = uni.getStorageSync("office_state");
 			this.tui.request('/document/getMyDocument', "GET", {}, false, true, false).then((res) => {
 				this.publishDocument = res.data;
+				this.publishDocument.sort(function(a, b) {
+				  var x = a.date;
+				  var y = b.date;
+				  return x > y ? -1 : x < y ? 1 : 0;
+				});
 				for (var i = 0; i < this.publishDocument.length; i++) {
 					this.publishDocument[i].bg = this.getRandom();
 					this.publishDocument[i].like = false;
@@ -135,6 +140,11 @@
 			this.tui.request('/document/getProcessed', "GET", {}, false, true, false).then((res) => {
 				if(res.status == 200){
 					this.documentHistory = res.data;
+					this.documentHistory.sort(function(a, b) {
+					  var x = a.date;
+					  var y = b.date;
+					  return x > y ? -1 : x < y ? 1 : 0;
+					});
 				}else{
 					this.tui.toast(res.message, 2000, false);
 				}

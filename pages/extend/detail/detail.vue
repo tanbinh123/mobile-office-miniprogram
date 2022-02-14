@@ -4,7 +4,6 @@
 		<view class="container tui-skeleton">
 			<image src="https://www.thorui.cn/img/wait.gif"  mode="widthFix" class="tui-banner tui-skeleton-rect"></image>
 			
-			
 			<view class="tui-content-log">
 				<view class="tui-version-date">
 					{{document.code?document.code:"echo."}} | {{document.title?document.title:"echo."}}
@@ -23,7 +22,7 @@
 			</view>
 			
 			<!-- 新建 / 草稿状态 -->
-			<view class="tui-view" v-if="this.new || this.document.state == '0'">
+			<view class="tui-view" v-show="tag">
 				<!-- 内容 -->
 				<form :report-submit="true" @submit="formLogin">
 				<view class="tui-content">
@@ -52,7 +51,7 @@
 				 uploadFileUrl="/#"></jinEdit>
 			</view >
 			
-			<view class="tui-view" v-else>
+			<view class="tui-view" v-show="!tag">
 				<block v-for="(item,index) in dataList" :key="index">
 					<tui-collapse :index="index" :current="item.current" :disabled="item.disabled" @click="change">
 						<template v-slot:title>
@@ -127,6 +126,7 @@
 		},
 		data() {
 			return {
+				tag: false,
 				remark: "",
 				dataList: [{
 						name: "公文审批",
@@ -151,7 +151,7 @@
 					"title": ""
 				},
 				edit: false,
-				new: false,
+				ifnew: false,
 				skeletonShow: true,
 				stateIcon: ["edit","transport","people","home","notice","order","check"],
 				stateName:[],
@@ -165,7 +165,6 @@
 			//新建
 			if (option.edit == "true"){
 				this.edit = true;
-				
 			}else{
 				this.dataList[0].disabled = true;
 				this.dataList[0].current = -1;
@@ -177,7 +176,7 @@
 				this.document.publisherName = user.name;
 				this.document.date = new Date().toISOString();
 				this.document.state = "0";
-				this.new = true;
+				this.ifnew = true;
 				titleName = "[新建]";
 			}else{
 				this.document = uni.getStorageSync("office_detail_document");
@@ -192,11 +191,10 @@
 			uni.setNavigationBarTitle({
 				title: "公文：" + titleName
 			})
-			if (option.edit == "true"){
-				this.edit = true;
+			if(this.ifnew == true || this.document.state == '0'){
+				this.tag = true;
 			}
-			
-			
+			console.log(this.tag)
 			setTimeout(() => {
 				this.skeletonShow = false
 			}, 800);
@@ -265,10 +263,10 @@
 					return;
 				}
 				this.document.content = res.html;
-				// if(this.new == false) {
-				// 	this.tui.toast('公文已更新，请提交审核', 2000, true);
-				// 	return;
-				// }
+				if(this.ifnew == false) {
+					this.tui.toast('公文已更新，请提交审核', 2000, true);
+					return;
+				}
 				console.log(res);
 				let rules = [
 					{

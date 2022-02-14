@@ -162,10 +162,16 @@
 		onLoad() {
 			this.tui.request('/document/getPublish', "GET", {}, false,true, false ).then((res) => {
 				this.publishDocument = res.data;
+				this.publishDocument.sort(function(a, b) {
+				  var x = a.date;
+				  var y = b.date;
+				  return x > y ? -1 : x < y ? 1 : 0;
+				});
 				for(var i = 0; i < this.publishDocument.length; i++){
 					this.publishDocument[i].bg = this.getRandom();
 					this.publishDocument[i].like = false;
 					this.publishDocument[i].stateName = uni.getStorageSync("office_state")[parseInt(this.publishDocument[i].state)].name;
+					
 				}
 				console.log(res.data)
 			}).catch((res) => {

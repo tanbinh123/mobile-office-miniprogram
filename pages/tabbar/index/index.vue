@@ -76,7 +76,7 @@
 				<view class="tui-extend-box">
 					<block>
 						<view class="tui-extend-item tui-bg-3" @tap.stop="detail(item)">
-							<view class="tui-title-white tui-light" >欢迎来自 <u>{{user.eruptOrg != null? user.eruptOrg.name:'未知'}}</u>  的<u>{{user.eruptPost != null? user.eruptPost.name : '未知'}}</u> -{{user.name}}</view>
+							<view class="tui-title-white tui-light" >欢迎来自 {{user.eruptOrg != null? user.eruptOrg.name:'未知'}}的{{user.eruptPost != null? user.eruptPost.name : '未知'}}-{{user.name}}</view>
 							<view class="tui-flex-box tui-title-white tui-sub-title">
 								<tui-tag v-for="(item, index) in department" :key="'index2' + index" margin="10rpx 10rpx 5rpx 5rpx" shape="circle"
 								 :type="item.bg" @click="show">{{item.name}}:{{item.sort}}人</tui-tag>

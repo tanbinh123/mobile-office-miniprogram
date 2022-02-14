@@ -50,12 +50,7 @@
 					<text class="tui-list-cell_name">网络测试</text>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell @click="detail" :arrow="true">
-				<view class="tui-item-box">
-					<tui-icon name="service-fill" :size="24" color="#5677fc"></tui-icon>
-					<view class="tui-list-cell_name">服务</view>
-				</view>
-			</tui-list-cell>
+
 			<tui-list-cell  :arrow="true">
 				<view class="tui-item-box" @tap="tapEvent" data-index="1">
 					<tui-icon name="explore-fill" :size="24" color="#19be6b"></tui-icon>
